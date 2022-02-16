@@ -1,5 +1,6 @@
 package benzenestudios.sulphate.tests;
 
+import benzenestudios.sulphate.Anchor;
 import benzenestudios.sulphate.SulphateScreen;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.api.ClientModInitializer;
@@ -12,6 +13,8 @@ import org.lwjgl.glfw.GLFW;
 public class SulphateTests implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
+		System.out.println("Sulphate Tests Loaded");
+
 		KeyMapping keybind = KeyBindingHelper.registerKeyBinding(new KeyMapping(
 				"key.sulphate_tests.openstupid",
 				InputConstants.Type.KEYSYM,
@@ -21,6 +24,7 @@ public class SulphateTests implements ClientModInitializer {
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			if (keybind.consumeClick()) {
+				System.out.println("Pressed Stupid Keybind");
 				client.setScreen(new StupidScreen());
 			}
 		});
@@ -31,14 +35,17 @@ class StupidScreen extends SulphateScreen {
 	protected StupidScreen() {
 		super(new TextComponent("Some Stupid Screen"));
 
-		this.setRows(2);
+		int offsetX = (int) ((150 + this.getXSeparation()) * 3.0/2.0);
+		this.setAnchorX(Anchor.LEFT, () -> this.width / 2 - offsetX);
+
+		this.setRows(3);
 	}
 
 	@Override
 	protected void addWidgets() {
 		this.addButton(new TextComponent("I am a button"), System.out::println);
 		this.addButton(new TextComponent("I am also a button"), System.out::println);
-		this.addButton(new TextComponent("You did not need to add this button"), System.out::println);
+		this.addButton(new TextComponent("You did not need to add me >:("), System.out::println);
 		this.addButton(new TextComponent("Yes he did, shut up."), System.out::println);
 		this.addButton(new TextComponent("im cool tho"), System.out::println);
 

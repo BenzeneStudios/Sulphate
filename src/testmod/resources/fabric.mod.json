@@ -9,6 +9,7 @@
     "Valoeghese"
   ],
 
+  "icon": "assets/sulphate_tests/icon.png",
   "license": "Apache 2.0",
   "environment": "client",
   

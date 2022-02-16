@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "sulphate",
+  "version": "${version}",
+  
+  "name": "Sulfate",
+  "description": "A simple screen library from Benzene Studios which automates more tedious actions therein.",
+  "authors": [
+    "Valoeghese"
+  ],
+  
+  "icon": "assets/sulphate/icon.png",
+  "license": "Apache 2.0",
+
+  "environment": "client",
+  
+  "depends": {
+    "fabricloader": ">=0.11.0"
+  },
+  
+  "mixins": [
+    "sulphate.mixins.json"
+  ]
+}

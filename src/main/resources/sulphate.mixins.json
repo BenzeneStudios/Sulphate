@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "benzenestudios.sulphate.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "client": [
+    "MixinScreen"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

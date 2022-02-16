@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "sulphate_tests",
+  "version": "${version}",
+  
+  "name": "Sulphate Tests",
+  "description": "Tests for the Sulphate GUI library",
+  "authors": [
+    "Valoeghese"
+  ],
+
+  "license": "Apache 2.0",
+  "environment": "client",
+  
+  "entrypoints": {
+    "client": [
+      "benzenestudios.sulphate.tests.SulphateTests"
+    ]
+  },
+  
+  "depends": {
+    "sulphate": "*",
+    "fabricloader": ">=0.11.0"
+  }
+}

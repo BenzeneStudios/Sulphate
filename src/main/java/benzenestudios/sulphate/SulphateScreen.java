@@ -7,7 +7,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec2;
 
 import javax.annotation.Nullable;
 import java.util.LinkedList;
@@ -42,21 +42,27 @@ public abstract class SulphateScreen extends Screen {
 
 	// settings
 
-	protected void setAnchorX(Anchor xAnchor) {
-		this.setAnchorX(xAnchor, this.anchorX);
+	/**
+	 * Set the current anchor on the x axis to match the the given anchor.
+	 */
+	protected void setAnchorX(Anchor anchor) {
+		this.setAnchorX(anchor, this.anchorX);
 	}
 
-	protected void setAnchorX(Anchor xAnchor, IntSupplier position) {
-		this.anchor = this.anchor.withX(xAnchor.xAnchor);
+	protected void setAnchorX(Anchor anchor, IntSupplier position) {
+		this.anchor = this.anchor.withX(anchor.x);
 		this.anchorX = position;
 	}
 
-	protected void setAnchorY(Anchor yAnchor) {
-		this.setAnchorX(yAnchor, this.anchorX);
+	/**
+	 * Set the current anchor on the y axis to match the given anchor.
+	 */
+	protected void setAnchorY(Anchor anchor) {
+		this.setAnchorX(anchor, this.anchorY);
 	}
 
-	protected void setAnchorY(Anchor yAnchor, IntSupplier position) {
-		this.anchor = this.anchor.withY(yAnchor.xAnchor);
+	protected void setAnchorY(Anchor anchor, IntSupplier position) {
+		this.anchor = this.anchor.withY(anchor.y);
 		this.anchorY = position;
 	}
 
@@ -64,10 +70,24 @@ public abstract class SulphateScreen extends Screen {
 		this.setAnchor(anchor, this.anchorX, this.anchorY);
 	}
 
-	protected void setAnchor(Anchor anchor, IntSupplier anchorX, IntSupplier anchorY) {
+	protected void setAnchor(Anchor anchor, IntSupplier xPos, IntSupplier yPos) {
 		this.anchor = anchor;
-		this.anchorX = anchorX;
-		this.anchorY = anchorY;
+		this.anchorX = xPos;
+		this.anchorY = yPos;
+	}
+
+	/**
+	 * @return get the anchor of the widgets on this screen.
+	 */
+	public Anchor getAnchor() {
+		return this.anchor;
+	}
+
+	/**
+	 * @return the position the widgets will be anchored to, at the current scale and dimensions.
+	 */
+	public Vec2 getAnchorPosition() {
+		return new Vec2(this.anchorX.getAsInt(), this.anchorY.getAsInt());
 	}
 
 	protected void setYSeparation(int separation) {
@@ -184,7 +204,7 @@ public abstract class SulphateScreen extends Screen {
 		if (!this.toRePositionY.isEmpty()) {
 			yOff = this.anchorY.getAsInt();
 
-			switch (this.anchor.yAnchor) {
+			switch (this.anchor.y) {
 			case -1:
 				break;
 			case 1:
@@ -233,7 +253,7 @@ public abstract class SulphateScreen extends Screen {
 
 		int x = this.anchorX.getAsInt();
 
-		switch (this.anchor.xAnchor) {
+		switch (this.anchor.x) {
 		case -1:
 			break;
 		case 1:

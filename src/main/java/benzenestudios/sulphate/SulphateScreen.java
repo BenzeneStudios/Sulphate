@@ -48,7 +48,6 @@ public abstract class SulphateScreen extends Screen {
 
 	protected void setAnchorX(Anchor xAnchor, IntSupplier position) {
 		this.anchor = this.anchor.withX(xAnchor.xAnchor);
-		System.out.println(this.anchor.name());
 		this.anchorX = position;
 	}
 

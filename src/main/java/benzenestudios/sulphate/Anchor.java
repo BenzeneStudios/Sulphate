@@ -41,19 +41,19 @@ public enum Anchor {
 	 */
 	BOTTOM_RIGHT(1, 1);
 
-	Anchor(int xAnchor, int yAnchor) {
-		this.xAnchor = xAnchor;
-		this.yAnchor = yAnchor;
+	Anchor(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 
-	public final int xAnchor, yAnchor;
+	public final int x, y;
 
-	public Anchor withX(int xAnchor) {
-		return VALUES[xAnchor + 1][this.yAnchor + 1];
+	public Anchor withX(int x) {
+		return VALUES[x + 1][this.y + 1];
 	}
 
-	public Anchor withY(int yAnchor) {
-		return VALUES[this.xAnchor + 1][yAnchor + 1];
+	public Anchor withY(int y) {
+		return VALUES[this.x + 1][y + 1];
 	}
 
 	private static final Anchor[][] VALUES = new Anchor[][] {

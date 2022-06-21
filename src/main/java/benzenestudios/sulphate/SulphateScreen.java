@@ -7,7 +7,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.phys.Vec2;
 
 import javax.annotation.Nullable;
 import java.util.LinkedList;
@@ -86,8 +85,8 @@ public abstract class SulphateScreen extends Screen {
 	/**
 	 * @return the position the widgets will be anchored to, at the current scale and dimensions.
 	 */
-	public Vec2 getAnchorPosition() {
-		return new Vec2(this.anchorX.getAsInt(), this.anchorY.getAsInt());
+	public Vec2i getAnchorPosition() {
+		return new Vec2i(this.anchorX.getAsInt(), this.anchorY.getAsInt());
 	}
 
 	protected void setYSeparation(int separation) {
@@ -134,8 +133,6 @@ public abstract class SulphateScreen extends Screen {
 	// the 10 billion overloads of addButton
 
 	private static int defaultWidthFor(int rows) {
-//		int width = 200 - 50 * (rows / 2);
-//		if (width <= 50) width = 100;
 		return rows == 1 ? 200 : 150;
 	}
 
@@ -198,7 +195,7 @@ public abstract class SulphateScreen extends Screen {
 
 	@Override
 	protected final void init() {
-		yOff = 2 * this.width / 3; // just in case
+		yOff = 2 * this.height / 3; // just in case
 		this.addWidgets();
 
 		if (!this.toRePositionY.isEmpty()) {

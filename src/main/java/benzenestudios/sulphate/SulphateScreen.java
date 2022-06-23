@@ -202,6 +202,15 @@ public abstract class SulphateScreen extends Screen {
 		return this.done;
 	}
 
+	protected AbstractButton addDoneWithOffset(int yOffset) {
+		return this.addDoneWithOffset(Button::new, yOffset);
+	}
+
+	protected AbstractButton addDoneWithOffset(ButtonConstructor<?> cstr, int yOffset) {
+		this.addRenderableWidget(this.done = cstr.create(this.width / 2 - 100, AUTO_ADJUST + yOffset, 200, 20, CommonComponents.GUI_DONE, button -> this.onClose(), Button.NO_TOOLTIP));
+		return this.done;
+	}
+
 	// impl stuff
 
 	private int calculateHeight() {
@@ -268,11 +277,13 @@ public abstract class SulphateScreen extends Screen {
 
 			if (!toRePositionX.isEmpty()) {
 				this.repositionX(toRePositionX, rowWidth);
-				if (this.done != null && this.done.y == AUTO) yOff += this.ySeparation.applyAsInt(this.done); // only run this auto if it hasn't made a new row already
+				yOff += nextSeparation;
 			}
+
+			if (this.done != null && this.done.y > AUTO) yOff += this.done.y - AUTO_ADJUST; // auto adjust
 		}
 
-		if (this.done != null && this.done.y == AUTO) {
+		if (this.done != null && this.done.y >= AUTO) {
 			this.done.y = yOff;
 		}
 
@@ -319,6 +330,7 @@ public abstract class SulphateScreen extends Screen {
 		this.minecraft.setScreen(this.parent);
 	}
 
-	// this is how long cosmetica has been providing better minecraft cosmetics for free since
+	// this is the year cosmetica been providing better minecraft cosmetics for free since
 	private static final int AUTO = 42069;
+	private static final int AUTO_ADJUST = 69420;
 }

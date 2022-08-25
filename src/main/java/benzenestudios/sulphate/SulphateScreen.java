@@ -7,12 +7,12 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.phys.Vec2;
 
 import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.IntSupplier;
+import java.util.function.ToIntFunction;
 
 /**
  * Screen that handles automatic placement of widgets.
@@ -34,7 +34,7 @@ public abstract class SulphateScreen extends Screen {
 	private IntSupplier anchorY = () -> this.height / 2;
 	private IntSupplier anchorX = () -> this.width / 2;
 	private int rows = 1;
-	private int ySeparation = 24;
+	private ToIntFunction<AbstractWidget> ySeparation = w -> w.getHeight() + 4;
 	private int xSeparation = 10;
 
 	private int yOff;
@@ -86,11 +86,15 @@ public abstract class SulphateScreen extends Screen {
 	/**
 	 * @return the position the widgets will be anchored to, at the current scale and dimensions.
 	 */
-	public Vec2 getAnchorPosition() {
-		return new Vec2(this.anchorX.getAsInt(), this.anchorY.getAsInt());
+	public Vec2i getAnchorPosition() {
+		return new Vec2i(this.anchorX.getAsInt(), this.anchorY.getAsInt());
 	}
 
 	protected void setYSeparation(int separation) {
+		this.ySeparation = w -> separation;
+	}
+
+	protected void setYSeparation(ToIntFunction<AbstractWidget> separation) {
 		this.ySeparation = separation;
 	}
 
@@ -99,7 +103,7 @@ public abstract class SulphateScreen extends Screen {
 	}
 
 	protected void setSeparation(int x, int y) {
-		this.ySeparation = y;
+		this.ySeparation = w -> y;
 		this.xSeparation = x;
 	}
 
@@ -107,8 +111,8 @@ public abstract class SulphateScreen extends Screen {
 		return this.xSeparation;
 	}
 
-	public int getYSeparation() {
-		return this.ySeparation;
+	public int getYSeparation(AbstractWidget widget) {
+		return this.ySeparation.applyAsInt(widget);
 	}
 
 	protected void setRows(int rows) {
@@ -118,6 +122,11 @@ public abstract class SulphateScreen extends Screen {
 	// implement this
 
 	protected abstract void addWidgets();
+
+	// can implement this
+
+	public void afterInit() {
+	}
 
 	// adding stuff
 
@@ -134,8 +143,6 @@ public abstract class SulphateScreen extends Screen {
 	// the 10 billion overloads of addButton
 
 	private static int defaultWidthFor(int rows) {
-//		int width = 200 - 50 * (rows / 2);
-//		if (width <= 50) width = 100;
 		return rows == 1 ? 200 : 150;
 	}
 
@@ -194,11 +201,38 @@ public abstract class SulphateScreen extends Screen {
 		return this.done;
 	}
 
+	protected AbstractButton addDoneWithOffset(int yOffset) {
+		return this.addDoneWithOffset(Button::new, yOffset);
+	}
+
+	protected AbstractButton addDoneWithOffset(ButtonConstructor<?> cstr, int yOffset) {
+		this.addRenderableWidget(this.done = cstr.create(this.width / 2 - 100, AUTO_ADJUST + yOffset, 200, 20, CommonComponents.GUI_DONE, button -> this.onClose(), Button.NO_TOOLTIP));
+		return this.done;
+	}
+
 	// impl stuff
+
+	private int calculateHeight() {
+		int nextSeparation = 0;
+		int runningHeight = 0;
+		int objs = 0;
+
+		for (int i : this.toRePositionY.stream().mapToInt(this.ySeparation::applyAsInt).toArray()) {
+			nextSeparation = Math.max(nextSeparation, i);
+
+			if (++objs == this.rows) {
+				runningHeight += nextSeparation;
+				nextSeparation = 0;
+				objs = 0; // reset object count
+			}
+		}
+
+		return runningHeight + nextSeparation; // in case another row hasn't been completed
+	}
 
 	@Override
 	protected final void init() {
-		yOff = 2 * this.width / 3; // just in case
+		yOff = 2 * this.height / 3; // just in case
 		this.addWidgets();
 
 		if (!this.toRePositionY.isEmpty()) {
@@ -208,10 +242,10 @@ public abstract class SulphateScreen extends Screen {
 			case -1:
 				break;
 			case 1:
-				yOff -= (this.ySeparation * this.toRePositionY.size()) / this.rows;
+				yOff -= calculateHeight();
 				break;
 			default:
-				yOff -= (this.ySeparation * this.toRePositionY.size()) / (2 * this.rows);
+				yOff -= calculateHeight() / 2;
 				break;
 			}
 
@@ -219,33 +253,40 @@ public abstract class SulphateScreen extends Screen {
 
 			// so we can centre everything along x axis
 			List<AbstractWidget> toRePositionX = new LinkedList<>();
-			int xOffset = 0;
+			int rowWidth = 0;
+
+			int nextSeparation = 0;
 
 			for (AbstractWidget widget : this.toRePositionY) {
 				widget.y = yOff;
+				nextSeparation = Math.max(nextSeparation, this.ySeparation.applyAsInt(widget));
 				++objs;
-				xOffset += widget.getWidth() + this.xSeparation;
+				rowWidth += widget.getWidth() + this.xSeparation;
 				toRePositionX.add(widget);
 
 				if (objs == this.rows) {
-					this.repositionX(toRePositionX, xOffset);
+					this.repositionX(toRePositionX, rowWidth);
 
-					yOff += this.ySeparation;
-					objs = xOffset = 0;
+					yOff += nextSeparation;
+					nextSeparation = 0; // reset next separation
+					objs = rowWidth = 0; // reset row width and object count
 					toRePositionX = new LinkedList<>();
 				}
 			}
 
 			if (!toRePositionX.isEmpty()) {
-				this.repositionX(toRePositionX, xOffset);
+				this.repositionX(toRePositionX, rowWidth);
+				yOff += nextSeparation;
 			}
 
-			yOff += 3 * this.ySeparation / 2; // for the done button
+			if (this.done != null && this.done.y > AUTO) yOff += this.done.y - AUTO_ADJUST; // auto adjust
 		}
 
-		if (this.done != null && this.done.y == AUTO) {
+		if (this.done != null && this.done.y >= AUTO) {
 			this.done.y = yOff;
 		}
+
+		this.afterInit();
 	}
 
 	private void repositionX(List<AbstractWidget> toRePositionX, int xOffset) {
@@ -288,6 +329,7 @@ public abstract class SulphateScreen extends Screen {
 		this.minecraft.setScreen(this.parent);
 	}
 
-	// this is when cosmetica has been providing better minecraft cosmetics for free since
-	private static int AUTO = 42069;
+	// this is the year cosmetica been providing better minecraft cosmetics for free since
+	private static final int AUTO = 42069;
+	private static final int AUTO_ADJUST = 69420;
 }

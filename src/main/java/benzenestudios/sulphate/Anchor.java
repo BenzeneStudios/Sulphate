@@ -48,12 +48,12 @@ public enum Anchor {
 
 	public final int x, y;
 
-	public Anchor withX(int xAnchor) {
-		return VALUES[xAnchor + 1][this.y + 1];
+	public Anchor withX(int x) {
+		return VALUES[x + 1][this.y + 1];
 	}
 
-	public Anchor withY(int yAnchor) {
-		return VALUES[this.x + 1][yAnchor + 1];
+	public Anchor withY(int y) {
+		return VALUES[this.x + 1][y + 1];
 	}
 
 	private static final Anchor[][] VALUES = new Anchor[][] {

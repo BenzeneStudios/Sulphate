@@ -28,7 +28,7 @@ public abstract class SulphateScreen extends Screen {
 	}
 
 	// mostly appending and iterating so LinkedList
-	private List<AbstractWidget> toRePositionY = new LinkedList<>();
+	protected List<AbstractWidget> toRePositionY = new LinkedList<>();
 
 	private Anchor anchor = Anchor.CENTRE;
 	private IntSupplier anchorY = () -> this.height / 2;
@@ -137,7 +137,7 @@ public abstract class SulphateScreen extends Screen {
 	protected <T extends AbstractWidget> T addWidget(WidgetConstructor<T> constr, Component text, int width, int height) {
 		T widget = constr.create(0, 0, width, height, text);
 		this.toRePositionY.add(widget);
-		return (T) super.addRenderableWidget(widget);
+		return (T) this.addRenderableWidget(widget);
 	}
 
 	// the 10 billion overloads of addButton
@@ -177,7 +177,7 @@ public abstract class SulphateScreen extends Screen {
 	protected <T extends AbstractButton> T addButton(ButtonConstructor<T> constr, Component text, int width, int height, Button.OnPress onPress, Button.OnTooltip onTooltip) {
 		T widget = constr.create(AUTO, AUTO, width, height, text, onPress, onTooltip);
 		this.toRePositionY.add(widget);
-		return (T) super.addRenderableWidget(widget);
+		return (T) this.addRenderableWidget(widget);
 	}
 
 	// it's everywhere
@@ -208,6 +208,25 @@ public abstract class SulphateScreen extends Screen {
 	protected AbstractButton addDoneWithOffset(ButtonConstructor<?> cstr, int yOffset) {
 		this.addRenderableWidget(this.done = cstr.create(this.width / 2 - 100, AUTO_ADJUST + yOffset, 200, 20, CommonComponents.GUI_DONE, button -> this.onClose(), Button.NO_TOOLTIP));
 		return this.done;
+	}
+
+	/**
+	 * Alias for addButton(T widget)
+	 * @reason easy 1.17+ porting/backporting
+	 * @return the given widget
+	 */
+	protected <T extends AbstractWidget> T addRenderableWidget(T widget) {
+		return super.addButton(widget);
+	}
+
+	/**
+	 * Adds the given widget to be rendered, but not as a widget.
+	 * @reason easy 1.17+ porting/backporting
+	 * @return the given widget
+	 */
+	protected <T extends AbstractWidget> T addRenderableOnly(T widget) {
+		this.buttons.add(widget);
+		return widget;
 	}
 
 	// impl stuff
@@ -318,11 +337,11 @@ public abstract class SulphateScreen extends Screen {
 		super.render(matrices, mouseX, mouseY, delta);
 	}
 
-	@Override
-	protected void clearWidgets() {
-		super.clearWidgets();
-		this.toRePositionY.clear();
-	}
+//	@Override
+//	protected void clearWidgets() {
+//		super.clearWidgets();
+//		this.toRePositionY.clear();
+//	}
 
 	@Override
 	public void onClose() {

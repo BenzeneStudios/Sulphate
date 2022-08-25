@@ -50,5 +50,8 @@ class StupidScreen extends SulphateScreen {
 		this.addButton(new TextComponent("im cool tho"), System.out::println);
 
 		this.addDone();
+
+		// make sure this cursed cast works
+		((ExtendedScreen) this).getWidgets().forEach(System.out::println);
 	}
 }

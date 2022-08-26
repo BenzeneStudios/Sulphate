@@ -2,6 +2,7 @@ package benzenestudios.sulphate;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -20,6 +21,13 @@ public abstract class ModernScreen extends Screen {
 	}
 
 	protected final List<Widget> renderables = Lists.newArrayList();
+
+	@Override
+	public void init(Minecraft minecraft, int width, int height) {
+		// clear current renderables on screen (re)initialisation
+		this.renderables.clear();
+		super.init(minecraft, width, height);
+	}
 
 	/**
 	 * Alias for addButton(T widget)

@@ -3,6 +3,7 @@ package benzenestudios.sulphate.mixin;
 import java.util.Collection;
 import java.util.List;
 
+import benzenestudios.sulphate.ModernScreen;
 import net.minecraft.client.gui.components.AbstractWidget;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,12 +33,13 @@ public class MixinScreen implements ExtendedScreen {
 	@Override
 	public void removeChild(GuiEventListener element) {
 		this.children.remove(element);
+		if (((Object) this) instanceof ModernScreen && element instanceof Widget) ((ModernScreen) (Object) this).removeRenderable((Widget) element);
 		if (element instanceof AbstractWidget) this.buttons.remove((AbstractWidget) element);
 	}
 
 	@Override
 	public Collection<Widget> getWidgets() {
-		return (Collection<Widget>) (Object) this.buttons;
+		return (((Object) this) instanceof ModernScreen) ? ((ModernScreen) (Object) this).renderables() : (Collection<Widget>) (Object) this.buttons;
 	}
 
 	@Override

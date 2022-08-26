@@ -1,12 +1,9 @@
 package benzenestudios.sulphate;
 
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Widget;
-import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -20,7 +17,7 @@ import java.util.function.ToIntFunction;
 /**
  * Screen that handles automatic placement of widgets.
  */
-public abstract class SulphateScreen extends Screen {
+public abstract class SulphateScreen extends ModernScreen {
 	protected SulphateScreen(Component title) {
 		this(title, null);
 	}
@@ -42,7 +39,6 @@ public abstract class SulphateScreen extends Screen {
 
 	private int yOff;
 	protected final Screen parent;
-	protected final List<Widget> renderables = Lists.newArrayList();
 
 	// settings
 
@@ -214,31 +210,6 @@ public abstract class SulphateScreen extends Screen {
 		return this.done;
 	}
 
-	/**
-	 * Alias for addButton(T widget)
-	 * @reason easy 1.17+ porting/backporting
-	 * @return the given widget
-	 */
-	protected <T extends Widget & GuiEventListener> T addRenderableWidget(T widget) {
-		this.renderables.add(widget);
-		return this.addWidget(widget);
-	}
-
-	@Override
-	protected <T extends AbstractWidget> T addButton(T button) {
-		return this.addRenderableWidget(button);
-	}
-
-	/**
-	 * Adds the given widget to be rendered, but not as a widget.
-	 * @reason easy 1.17+ porting/backporting
-	 * @return the given widget
-	 */
-	protected <T extends Widget> T addRenderableOnly(T widget) {
-		this.renderables.add(widget);
-		return widget;
-	}
-
 	// impl stuff
 
 	private int calculateHeight() {
@@ -344,10 +315,7 @@ public abstract class SulphateScreen extends Screen {
 	public void render(PoseStack matrices, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrices);
 		drawCenteredString(matrices, this.font, this.title, this.width / 2, 15, 0xFFFFFF);
-
-		for(int i = 0; i < this.renderables.size(); ++i) {
-			this.renderables.get(i).render(matrices, mouseX, mouseY, partialTicks);
-		}
+		super.render(matrices, mouseX, mouseY, partialTicks);
 	}
 
 //	@Override

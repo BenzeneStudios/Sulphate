@@ -15,7 +15,7 @@ import java.util.List;
  * Screen with more 1.17+ like methods for easier porting.
  */
 public abstract class ModernScreen extends Screen {
-	ModernScreen(Component component) {
+	public ModernScreen(Component component) {
 		super(component);
 	}
 

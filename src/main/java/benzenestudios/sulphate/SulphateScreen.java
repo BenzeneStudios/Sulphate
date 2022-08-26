@@ -1,6 +1,7 @@
 package benzenestudios.sulphate;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
@@ -318,11 +319,12 @@ public abstract class SulphateScreen extends ModernScreen {
 		super.render(matrices, mouseX, mouseY, partialTicks);
 	}
 
-//	@Override
-//	protected void clearWidgets() {
-//		super.clearWidgets();
-//		this.toRePositionY.clear();
-//	}
+	@Override
+	public void init(Minecraft minecraft, int width, int height) {
+		// clear list of widgets to reposition in the y axis
+		this.toRePositionY.clear();
+		super.init(minecraft, width, height);
+	}
 
 	@Override
 	public void onClose() {

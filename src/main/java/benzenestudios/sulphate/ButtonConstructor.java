@@ -6,5 +6,5 @@ import net.minecraft.network.chat.Component;
 
 @FunctionalInterface
 public interface ButtonConstructor<T extends AbstractButton> {
-	T create(int x, int y, int width, int height, Component text, Button.OnPress onPress, Button.OnTooltip onTooltip);
+	T create(int x, int y, int width, int height, Component text, Button.OnPress onPress, ClassicButton.OnTooltip onTooltip);
 }

@@ -3,13 +3,13 @@ package benzenestudios.sulphate.mixin;
 import java.util.Collection;
 import java.util.List;
 
+import net.minecraft.client.gui.components.Renderable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 
 import benzenestudios.sulphate.ExtendedScreen;
-import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
@@ -28,7 +28,7 @@ public class MixinScreen implements ExtendedScreen {
 	@Shadow
 	@Final
 	@Mutable
-	private List<Widget> renderables;
+	private List<Renderable> renderables;
 
 	@Shadow
 	@Final
@@ -39,11 +39,11 @@ public class MixinScreen implements ExtendedScreen {
 	public void removeChild(GuiEventListener element) {
 		this.children.remove(element);
 		if (element instanceof NarratableEntry) this.narratables.remove((NarratableEntry) element);
-		if (element instanceof Widget) this.renderables.remove((Widget) element);
+		if (element instanceof Renderable) this.renderables.remove((Renderable) element);
 	}
 
 	@Override
-	public Collection<Widget> getWidgets() {
+	public Collection<Renderable> getWidgets() {
 		return this.renderables;
 	}
 

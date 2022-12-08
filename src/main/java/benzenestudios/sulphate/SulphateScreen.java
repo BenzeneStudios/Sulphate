@@ -13,7 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.IntSupplier;
 import java.util.function.ToIntFunction;
-import java.util.stream.Collectors;
 
 /**
  * Screen that handles automatic placement of widgets.
@@ -148,34 +147,34 @@ public abstract class SulphateScreen extends Screen {
 	}
 
 	protected Button addButton(Component text, Button.OnPress onPress) {
-		return this.addButton(Button::new, text, defaultWidthFor(this.rows), 20, onPress, Button.NO_TOOLTIP);
+		return this.addButton(ClassicButton::new, text, defaultWidthFor(this.rows), 20, onPress, ClassicButton.NO_TOOLTIP);
 	}
 
 	protected <T extends AbstractButton> T addButton(ButtonConstructor<T> constr, Component text, Button.OnPress onPress) {
-		return this.addButton(constr, text, defaultWidthFor(this.rows), 20, onPress, Button.NO_TOOLTIP);
+		return this.addButton(constr, text, defaultWidthFor(this.rows), 20, onPress, ClassicButton.NO_TOOLTIP);
 	}
 
-	protected Button addButton(Component text, Button.OnPress onPress, Button.OnTooltip onTooltip) {
-		return this.addButton(Button::new, text, defaultWidthFor(this.rows), 20, onPress, onTooltip);
+	protected Button addButton(Component text, Button.OnPress onPress, ClassicButton.OnTooltip onTooltip) {
+		return this.addButton(ClassicButton::new, text, defaultWidthFor(this.rows), 20, onPress, onTooltip);
 	}
 
-	protected <T extends AbstractButton> T addButton(ButtonConstructor<T> constr, Component text, Button.OnPress onPress, Button.OnTooltip onTooltip) {
+	protected <T extends AbstractButton> T addButton(ButtonConstructor<T> constr, Component text, Button.OnPress onPress, ClassicButton.OnTooltip onTooltip) {
 		return this.addButton(constr, text, defaultWidthFor(this.rows), 20, onPress, onTooltip);
 	}
 
 	protected Button addButton(int width, int height, Component text, Button.OnPress onPress) {
-		return this.addButton(Button::new, text, width, height, onPress, Button.NO_TOOLTIP);
+		return this.addButton(ClassicButton::new, text, width, height, onPress, ClassicButton.NO_TOOLTIP);
 	}
 
 	protected <T extends AbstractButton> T addButton(ButtonConstructor<T> constr, Component text, int width, int height, Button.OnPress onPress) {
-		return this.addButton(constr, text, width, height, onPress, Button.NO_TOOLTIP);
+		return this.addButton(constr, text, width, height, onPress, ClassicButton.NO_TOOLTIP);
 	}
 
-	protected Button addButton(int width, int height, Component text, Button.OnPress onPress, Button.OnTooltip onTooltip) {
-		return this.addButton(Button::new, text, width, height, onPress, onTooltip);
+	protected Button addButton(int width, int height, Component text, Button.OnPress onPress, ClassicButton.OnTooltip onTooltip) {
+		return this.addButton(ClassicButton::new, text, width, height, onPress, onTooltip);
 	}
 
-	protected <T extends AbstractButton> T addButton(ButtonConstructor<T> constr, Component text, int width, int height, Button.OnPress onPress, Button.OnTooltip onTooltip) {
+	protected <T extends AbstractButton> T addButton(ButtonConstructor<T> constr, Component text, int width, int height, Button.OnPress onPress, ClassicButton.OnTooltip onTooltip) {
 		T widget = constr.create(AUTO, AUTO, width, height, text, onPress, onTooltip);
 		this.toRePositionY.add(widget);
 		return (T) super.addRenderableWidget(widget);
@@ -186,7 +185,7 @@ public abstract class SulphateScreen extends Screen {
 	private AbstractButton done;
 
 	protected AbstractButton addDone() {
-		return this.addDone(Button::new, AUTO);
+		return this.addDone(ClassicButton::new, AUTO);
 	}
 
 	protected AbstractButton addDone(ButtonConstructor<?> cstr) {
@@ -194,20 +193,20 @@ public abstract class SulphateScreen extends Screen {
 	}
 
 	protected AbstractButton addDone(int y) {
-		return this.addDone(Button::new, y);
+		return this.addDone(ClassicButton::new, y);
 	}
 
 	protected AbstractButton addDone(ButtonConstructor<?> cstr, int y) {
-		this.addRenderableWidget(this.done = cstr.create(this.width / 2 - 100, y, 200, 20, CommonComponents.GUI_DONE, button -> this.onClose(), Button.NO_TOOLTIP));
+		this.addRenderableWidget(this.done = cstr.create(this.width / 2 - 100, y, 200, 20, CommonComponents.GUI_DONE, button -> this.onClose(), ClassicButton.NO_TOOLTIP));
 		return this.done;
 	}
 
 	protected AbstractButton addDoneWithOffset(int yOffset) {
-		return this.addDoneWithOffset(Button::new, yOffset);
+		return this.addDoneWithOffset(ClassicButton::new, yOffset);
 	}
 
 	protected AbstractButton addDoneWithOffset(ButtonConstructor<?> cstr, int yOffset) {
-		this.addRenderableWidget(this.done = cstr.create(this.width / 2 - 100, AUTO_ADJUST + yOffset, 200, 20, CommonComponents.GUI_DONE, button -> this.onClose(), Button.NO_TOOLTIP));
+		this.addRenderableWidget(this.done = cstr.create(this.width / 2 - 100, AUTO_ADJUST + yOffset, 200, 20, CommonComponents.GUI_DONE, button -> this.onClose(), ClassicButton.NO_TOOLTIP));
 		return this.done;
 	}
 
@@ -259,7 +258,7 @@ public abstract class SulphateScreen extends Screen {
 			int nextSeparation = 0;
 
 			for (AbstractWidget widget : this.toRePositionY) {
-				widget.y = yOff;
+				widget.setY(yOff);
 				nextSeparation = Math.max(nextSeparation, this.ySeparation.applyAsInt(widget));
 				++objs;
 				rowWidth += widget.getWidth() + this.xSeparation;
@@ -280,11 +279,11 @@ public abstract class SulphateScreen extends Screen {
 				yOff += nextSeparation;
 			}
 
-			if (this.done != null && this.done.y > AUTO) yOff += this.done.y - AUTO_ADJUST; // auto adjust
+			if (this.done != null && this.done.getY() > AUTO) yOff += this.done.getY() - AUTO_ADJUST; // auto adjust
 		}
 
-		if (this.done != null && this.done.y >= AUTO) {
-			this.done.y = yOff;
+		if (this.done != null && this.done.getY() >= AUTO) {
+			this.done.setY(yOff);
 		}
 
 		this.afterInit();
@@ -307,7 +306,7 @@ public abstract class SulphateScreen extends Screen {
 		}
 
 		for (AbstractWidget widget : toRePositionX) {
-			widget.x = x;
+			widget.setX(x);
 			x += widget.getWidth() + this.xSeparation;
 		}
 	}

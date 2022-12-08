@@ -1,6 +1,6 @@
 package benzenestudios.sulphate;
 
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.network.chat.Component;
 
@@ -18,7 +18,7 @@ public interface ExtendedScreen {
 	/**
 	 * @return a collection of widgets ("renderables") on the screen.
 	 */
-	Collection<Widget> getWidgets();
+	Collection<Renderable> getWidgets();
 
 	/**
 	 * @return a collection of all children on the screen. This collection may be larger than the one returned by {@linkplain ExtendedScreen#getWidgets()}.

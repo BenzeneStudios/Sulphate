@@ -7,7 +7,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
 public class SulphateTests implements ClientModInitializer {
@@ -33,7 +33,7 @@ public class SulphateTests implements ClientModInitializer {
 
 class StupidScreen extends SulphateScreen {
 	protected StupidScreen() {
-		super(new TextComponent("Some Stupid Screen"));
+		super(Component.literal("Some Stupid Screen"));
 
 		int offsetX = (int) ((150 + this.getXSeparation()) * 3.0/2.0);
 		this.setAnchorX(Anchor.LEFT, () -> this.width / 2 - offsetX);
@@ -43,11 +43,11 @@ class StupidScreen extends SulphateScreen {
 
 	@Override
 	protected void addWidgets() {
-		this.addButton(new TextComponent("I am a button"), System.out::println);
-		this.addButton(new TextComponent("I am also a button"), System.out::println);
-		this.addButton(new TextComponent("You did not need to add me >:("), System.out::println);
-		this.addButton(new TextComponent("Yes he did, shut up."), System.out::println);
-		this.addButton(new TextComponent("im cool tho"), System.out::println);
+		this.addButton(Component.literal("I am a button"), System.out::println);
+		this.addButton(Component.literal("I am also a button"), System.out::println);
+		this.addButton(Component.literal("You did not need to add me >:("), System.out::println);
+		this.addButton(Component.literal("Yes he did, shut up."), System.out::println);
+		this.addButton(Component.literal("im cool tho"), System.out::println);
 
 		this.addDone();
 	}

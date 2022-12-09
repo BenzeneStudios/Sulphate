@@ -14,6 +14,10 @@ import java.util.function.Consumer;
  * switching every button to a builder.
  */
 public class ClassicButton extends Button {
+	public ClassicButton(int x, int y, int width, int height, Component component, OnPress onPress) {
+		this(x, y, width, height, component, onPress, NO_TOOLTIP, Button.DEFAULT_NARRATION);
+	}
+
 	public ClassicButton(int x, int y, int width, int height, Component component, OnPress onPress, OnTooltip onTooltip) {
 		this(x, y, width, height, component, onPress, onTooltip, Button.DEFAULT_NARRATION);
 	}

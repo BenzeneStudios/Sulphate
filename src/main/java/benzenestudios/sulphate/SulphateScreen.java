@@ -1,6 +1,6 @@
 package benzenestudios.sulphate;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
@@ -312,10 +312,10 @@ public abstract class SulphateScreen extends Screen {
 	}
 
 	@Override
-	public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
-		this.renderBackground(matrices);
-		drawCenteredString(matrices, this.font, this.title, this.width / 2, 15, 0xFFFFFF);
-		super.render(matrices, mouseX, mouseY, delta);
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+		this.renderBackground(guiGraphics);
+		guiGraphics.drawCenteredString(this.font, this.title, this.width / 2, 15, 0xFFFFFF);
+		super.render(guiGraphics, mouseX, mouseY, delta);
 	}
 
 	@Override

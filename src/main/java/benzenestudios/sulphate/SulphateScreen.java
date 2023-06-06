@@ -154,26 +154,32 @@ public abstract class SulphateScreen extends Screen {
 		return this.addButton(constr, text, defaultWidthFor(this.rows), 20, onPress, ClassicButton.NO_TOOLTIP);
 	}
 
+	@Deprecated
 	protected Button addButton(Component text, Button.OnPress onPress, ClassicButton.OnTooltip onTooltip) {
 		return this.addButton(ClassicButton::new, text, defaultWidthFor(this.rows), 20, onPress, onTooltip);
 	}
 
+	@Deprecated
 	protected <T extends AbstractButton> T addButton(ButtonConstructor<T> constr, Component text, Button.OnPress onPress, ClassicButton.OnTooltip onTooltip) {
 		return this.addButton(constr, text, defaultWidthFor(this.rows), 20, onPress, onTooltip);
 	}
 
+	@SuppressWarnings("deprecation")
 	protected Button addButton(int width, int height, Component text, Button.OnPress onPress) {
 		return this.addButton(ClassicButton::new, text, width, height, onPress, ClassicButton.NO_TOOLTIP);
 	}
 
+	@SuppressWarnings("deprecation")
 	protected <T extends AbstractButton> T addButton(ButtonConstructor<T> constr, Component text, int width, int height, Button.OnPress onPress) {
 		return this.addButton(constr, text, width, height, onPress, ClassicButton.NO_TOOLTIP);
 	}
 
+	@Deprecated
 	protected Button addButton(int width, int height, Component text, Button.OnPress onPress, ClassicButton.OnTooltip onTooltip) {
 		return this.addButton(ClassicButton::new, text, width, height, onPress, onTooltip);
 	}
 
+	@Deprecated
 	protected <T extends AbstractButton> T addButton(ButtonConstructor<T> constr, Component text, int width, int height, Button.OnPress onPress, ClassicButton.OnTooltip onTooltip) {
 		T widget = constr.create(AUTO, AUTO, width, height, text, onPress, onTooltip);
 		this.toRePositionY.add(widget);
@@ -196,6 +202,7 @@ public abstract class SulphateScreen extends Screen {
 		return this.addDone(ClassicButton::new, y);
 	}
 
+	@SuppressWarnings("deprecation")
 	protected AbstractButton addDone(ButtonConstructor<?> cstr, int y) {
 		this.addRenderableWidget(this.done = cstr.create(this.width / 2 - 100, y, 200, 20, CommonComponents.GUI_DONE, button -> this.onClose(), ClassicButton.NO_TOOLTIP));
 		return this.done;
@@ -205,6 +212,7 @@ public abstract class SulphateScreen extends Screen {
 		return this.addDoneWithOffset(ClassicButton::new, yOffset);
 	}
 
+	@SuppressWarnings("deprecation")
 	protected AbstractButton addDoneWithOffset(ButtonConstructor<?> cstr, int yOffset) {
 		this.addRenderableWidget(this.done = cstr.create(this.width / 2 - 100, AUTO_ADJUST + yOffset, 200, 20, CommonComponents.GUI_DONE, button -> this.onClose(), ClassicButton.NO_TOOLTIP));
 		return this.done;

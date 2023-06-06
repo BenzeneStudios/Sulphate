@@ -38,10 +38,21 @@ public class ClassicButton extends Button {
 		this.onTooltip.narrateTooltip(component -> narrationElementOutput.add(NarratedElementType.HINT, component));
 	}
 
+	@Override
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float delta) {
+		super.render(poseStack, mouseX, mouseY, delta);
+
+		if (this.isHovered) {
+			this.onTooltip.onTooltip(this, poseStack, mouseX, mouseY);
+		}
+	}
+
 	/**
 	 * The old OnTooltip functional interface from 1.19.2 and below.
+	 * @deprecated migrate to {@link net.minecraft.client.gui.components.Tooltip} instead.
 	 */
 	@FunctionalInterface
+	@Deprecated
 	public interface OnTooltip {
 		void onTooltip(Button button, PoseStack poseStack, int x, int y);
 
@@ -49,6 +60,7 @@ public class ClassicButton extends Button {
 		}
 	}
 
+	@Deprecated
 	public static final OnTooltip NO_TOOLTIP = (button, poseStack, x, y) -> {
 	};
 }

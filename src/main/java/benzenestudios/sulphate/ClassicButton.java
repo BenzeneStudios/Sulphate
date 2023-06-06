@@ -1,6 +1,6 @@
 package benzenestudios.sulphate;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -39,11 +39,11 @@ public class ClassicButton extends Button {
 	}
 
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float delta) {
-		super.render(poseStack, mouseX, mouseY, delta);
+	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+		super.render(graphics, mouseX, mouseY, delta);
 
 		if (this.isHovered) {
-			this.onTooltip.onTooltip(this, poseStack, mouseX, mouseY);
+			this.onTooltip.onTooltip(this, graphics, mouseX, mouseY);
 		}
 	}
 
@@ -54,13 +54,13 @@ public class ClassicButton extends Button {
 	@FunctionalInterface
 	@Deprecated
 	public interface OnTooltip {
-		void onTooltip(Button button, PoseStack poseStack, int x, int y);
+		void onTooltip(Button button, GuiGraphics guiGraphics, int x, int y);
 
 		default void narrateTooltip(Consumer<Component> narrationConsumer) {
 		}
 	}
 
 	@Deprecated
-	public static final OnTooltip NO_TOOLTIP = (button, poseStack, x, y) -> {
+	public static final OnTooltip NO_TOOLTIP = (button, guiGraphics, x, y) -> {
 	};
 }

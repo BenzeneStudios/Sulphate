@@ -29,9 +29,10 @@ public class SulphateTests implements ClientModInitializer {
 				client.setScreen(new StupidScreen());
 			}
 		});
-	}
+	}gi
 }
 
+@SuppressWarnings("deprecation")
 class StupidScreen extends SulphateScreen {
 	protected StupidScreen() {
 		super(Component.literal("Some Stupid Screen"));
@@ -50,8 +51,8 @@ class StupidScreen extends SulphateScreen {
 		);
 		this.addButton(Component.literal("You did not need to add me >:("), System.out::println);
 		this.addButton(Component.literal("Yes he did, shut up."), System.out::println);
-		this.addButton(Component.literal("im cool tho"), System.out::println, (bn, stacc, x, y) -> {
-			this.renderTooltip(stacc, Component.literal("Cause I have a *tooltip*"), x, y);
+		this.addButton(Component.literal("im cool tho"), System.out::println, (bn, graphics, x, y) -> {
+			graphics.renderTooltip(this.font, Component.literal("Cause I have a *tooltip*"), x, y);
 		});
 
 		this.addDone();

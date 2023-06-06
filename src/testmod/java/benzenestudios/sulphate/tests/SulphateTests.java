@@ -29,7 +29,7 @@ public class SulphateTests implements ClientModInitializer {
 				client.setScreen(new StupidScreen());
 			}
 		});
-	}gi
+	}
 }
 
 @SuppressWarnings("deprecation")

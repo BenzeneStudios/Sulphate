@@ -33,7 +33,7 @@ public class MixinScreen implements ExtendedScreen {
 	@Shadow
 	@Final
 	@Mutable
-	private Component title;
+	protected Component title;
 	
 	@Override
 	public void removeChild(GuiEventListener element) {

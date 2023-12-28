@@ -39,8 +39,8 @@ public class ClassicButton extends Button {
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-		super.render(graphics, mouseX, mouseY, delta);
+	protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+		super.renderWidget(graphics, mouseX, mouseY, partialTick);
 
 		if (this.isHovered) {
 			this.onTooltip.onTooltip(this, graphics, mouseX, mouseY);

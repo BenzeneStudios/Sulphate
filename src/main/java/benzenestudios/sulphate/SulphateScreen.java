@@ -4,11 +4,13 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nullable;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.IntSupplier;
@@ -320,10 +322,13 @@ public abstract class SulphateScreen extends Screen {
 	}
 
 	@Override
-	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-		this.renderBackground(guiGraphics, mouseX, mouseY, delta);
-		guiGraphics.drawCenteredString(this.font, this.title, this.width / 2, 15, 0xFFFFFF);
-		super.render(guiGraphics, mouseX, mouseY, delta);
+	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+		this.renderBackground(graphics, mouseX, mouseY, partialTick);
+		graphics.drawCenteredString(this.font, this.title, this.width / 2, 15, 0xFFFFFF);
+
+		for (Renderable renderable : ((ExtendedScreen)this).getWidgets()) {
+			renderable.render(graphics, mouseX, mouseY, partialTick);
+		}
 	}
 
 	@Override
